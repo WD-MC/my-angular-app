@@ -34,5 +34,8 @@ pipeline {
         failure {
             echo 'Le déploiement a échoué.'
         }
+        always {
+            bat 'jenkins\\scripts\\kill.bat'
+        }
     }
 }
