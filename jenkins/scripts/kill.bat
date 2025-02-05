@@ -1,1 +1,1 @@
-taskkill /F /PID $(cat .pidfile)
+powershell Stop-Process -Id (Get-Content .pidfile)
