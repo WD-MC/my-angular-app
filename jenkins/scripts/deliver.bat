@@ -1,11 +1,15 @@
-npm run ng build
-npm run ng serve &
-sleep 1
-:: Récupérer le PID du processus 'ng serve'
-for /f "tokens=2" %%i in ('tasklist /fi "imagename eq node.exe" /fo csv ^| findstr /i "ng serve"') do set PID=%%i
+@echo off
+rem Construction de l'application Angular
+npm run build
 
-:: Écrire le PID dans le fichier .pidfile
-echo %PID% > .pidfile
+rem Lancement du serveur Angular
+start "" "cmd /c npm run serve"
+timeout /t 1 >nul
+
+rem Obtention du PID du processus Angular
+for /f "tokens=2" %%i in ('tasklist /fi "imagename eq node.exe" /fo csv /nh') do (
+    echo %%i > .pidfile
+)
 
 echo 'Now...'
 echo 'Visit http://localhost:4200 to see your Node.js/Angular application in action.'
