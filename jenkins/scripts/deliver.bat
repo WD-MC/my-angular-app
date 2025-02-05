@@ -1,7 +1,5 @@
-#!/usr/bin/env bat
-
 npm run ng build
-npm run ng serve &
+npm run ng serve > output.log 2>&1 & 
 sleep 1
 echo $! > .pidfile
 
