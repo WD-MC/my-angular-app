@@ -4,23 +4,27 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
+                echo 'Install Dependencies'
                 bat 'npm install'
             }
         }
         stage('Build') {
             steps {
-                bat 'npm run build'
+                echo 'Build'
+                bat 'npm run build --prod'
             }
         }
          stage('Unit Test') {
             steps {
+                echo 'Unit test'
                 timeout(time: 10, unit: 'MINUTES') {
-                    bat 'ng test --watch=false'
+                    bat 'npm run test -- --watch=false --browsers=ChromeHeadless'
                 }
             }
         }
         stage('Deploy') {
             steps {
+                echo 'Deploy'
                 bat 'jenkins\\scripts\\deliver.bat'
                 input message: 'Finibated using the web site? (Click "Proceed" to continue)'
             }
