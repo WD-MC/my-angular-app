@@ -57,7 +57,7 @@ pipeline {
                     echo 'Build ansible'
                     sh 'ls -l /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible'
                     sh 'find /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible -name "build.yml"'
-                    sh 'ansible-playbook ansible/build.yml -i ansible/inventory/host.yml'
+                    sh "ansiblePlaybook installation: 'Ansible', inventory: 'ansible/inventory/host.yml', playbook: 'ansible/build.yml', vaultTmpPath: ''"
                 }
             }
         }
