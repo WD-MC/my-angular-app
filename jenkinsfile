@@ -21,6 +21,9 @@ pipeline {
 
                 echo 'Vérification du répertoire courant'
                 sh 'pwd'  // Affiche le répertoire courant dans Jenkins
+                echo 'Liste des fichiers dans le répertoire de travail'
+                sh 'ls -l /var/lib/jenkins/workspace/Demo-ansible-pipeline'
+                sh 'ls -l /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible'
 
                 /*echo 'Build ansible'
                 script{
