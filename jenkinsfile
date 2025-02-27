@@ -1,4 +1,4 @@
-pipeline {
+/*pipeline {
     agent any
     tools {nodejs "NODEJS"}
     stages {
@@ -36,6 +36,30 @@ pipeline {
                 input message: 'Finibated using the web site? (Click "Proceed" to continue)'
             }
         }
+        
+    }
+    post {
+        success {
+            echo 'Le déploiement a réussi!'
+        }
+        failure {
+            echo 'Le déploiement a échoué.'
+        }
+    }
+}*/
+
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+                script{
+                    echo 'Build ansible'
+                    sh 'ansible-playbook ansible/build.yml -i ansible/inventory/host.yml'
+                }
+            }
+        }
+        
         
     }
     post {
