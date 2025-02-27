@@ -14,8 +14,10 @@ pipeline {
                 sh 'npm run build --prod'
 
                 sh 'ls -l ansible'
+                sh 'pwd'
+                sh 'ls -l'
                 echo 'Build ansible'
-                sh 'cat ./ansible/build.yml'
+                sh 'cat /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible/build.yml'
                 sh 'ansible-playbook /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible/build.yml -i ./ansible/inventory/host.yml'
             }
         }
