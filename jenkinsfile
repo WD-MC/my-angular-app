@@ -15,10 +15,7 @@ pipeline {
 
                 echo 'Build ansible'
                 script{
-                    sh 'ls -l /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible'
-                    sh 'ls -l /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible/build.yml'
-                    sh 'ansible-playbook -vvv /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible/build.yml -i /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible/inventory/host.yml'
-                    
+                    sh "ansible-playbook /ansible/build.yml -i /ansible/inventory/host.yml"
                 }
             }
         }
