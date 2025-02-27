@@ -8,6 +8,12 @@ pipeline {
                 sh 'npm install'
             }
         }
+        stage('Check Ansible') {
+            steps {
+                echo 'Vérification de l\'installation d\'Ansible'
+                sh 'ansible --version'
+            }
+        }
         stage('Build') {
             steps {
                 echo 'Build'
