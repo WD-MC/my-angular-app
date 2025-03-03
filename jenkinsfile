@@ -48,7 +48,7 @@
     }
 }*/
 
-pipeline {
+/*pipeline {
     agent any
     stages {
         stage('Build') {
@@ -59,6 +59,29 @@ pipeline {
                     sh 'find /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible -name "build.yml"'
                     sh "ansiblePlaybook installation: 'Ansible', inventory: 'ansible/inventory/host.yml', playbook: 'ansible/build.yml', vaultTmpPath: ''"
                 }
+            }
+        }
+        
+        
+    }
+    post {
+        success {
+            echo 'Le déploiement a réussi!'
+        }
+        failure {
+            echo 'Le déploiement a échoué.'
+        }
+    }
+}*/
+
+pipeline {
+    agent any
+    stages {
+        stage('Build') {
+            steps {
+               sh "ansible --version"
+               sh "ansible-playbook --version"
+               sh "ansible-galaxy --version"
             }
         }
         
