@@ -1,6 +1,6 @@
 ---
 - name: Test Ansible SSH
-  hosts: all
+  hosts: servers
   become: yes
   tasks:
     - name: Test SSH connection
