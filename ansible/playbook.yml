@@ -1,7 +1,7 @@
 ---
 - name: Test Ansible SSH
   hosts: servers
-  become: true
+  become: false
   tasks:
     - name: Test SSH connection
       command: echo "SSH connection successful"
