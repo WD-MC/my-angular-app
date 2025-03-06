@@ -3,8 +3,5 @@
   hosts: all
   become: yes
   tasks:
-    - name: Disable SSH strict host key checking
-      ansible.builtin.command:
-        cmd: ssh-keyscan -H localhost >> ~/.ssh/known_hosts
     - name: Test SSH connection
       command: echo "SSH connection successful"
