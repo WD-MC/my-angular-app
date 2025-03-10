@@ -2,8 +2,8 @@
 - name: Test Ansible SSH
   hosts: servers
   become: false
-  roles: 
-    - {role:build}
+  roles:
+    - build
   tasks:
     - name: Test SSH connection
       command: echo "SSH connection successful"
