@@ -1,4 +1,4 @@
-/*pipeline {
+pipeline {
     agent any
     tools {nodejs "NODEJS"}
     stages {
@@ -8,7 +8,7 @@
                 sh 'npm install'
             }
         }
-        stage('Build') {
+        /*stage('Build') {
             steps {
                 echo 'Build'
                 sh 'npm run build --prod'
@@ -19,7 +19,7 @@
                 sh 'cat /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible/build.yml'
                 sh 'ansible-playbook /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible/build.yml -i ./ansible/inventory/host.yml'
             }
-        }
+        }*/
         stage('Unit Test') {
             steps {
                 echo 'Unit test'
@@ -28,6 +28,12 @@
                 }
             }
         }
+        stage('Build') {
+            steps {
+                sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml'
+            }
+        }
+    
         stage('Deploy') {
             steps {
                 echo 'Deploy'
@@ -46,7 +52,7 @@
             echo 'Le déploiement a échoué.'
         }
     }
-}*/
+}
 
 /*pipeline {
     agent any
@@ -74,7 +80,7 @@
     }
 }*/
 
-pipeline {
+/*pipeline {
     agent any
     stages {
         stage('Build') {
@@ -95,4 +101,4 @@ pipeline {
             echo 'Le déploiement a échoué.'
         }
     }
-} 
+} */
