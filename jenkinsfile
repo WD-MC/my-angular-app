@@ -21,7 +21,13 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml --extra-vars @ansible/vault.yml --vault-password-file <(echo $VAULT_PASS)'
+                script {
+                    // Créer un fichier temporaire pour le mot de passe
+                    writeFile file: 'vault_pass.txt', text: "${VAULT_PASS}"
+                    // Utiliser le fichier temporaire avec Ansible
+                    sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml --extra-vars @ansible/vault.yml --vault-password-file vault_pass.txt'
+                }
+                //sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml --extra-vars @ansible/vault.yml --vault-password-file vault_pass.txt'
             }
         }
     
