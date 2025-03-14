@@ -1,7 +1,7 @@
 ---
-- name: Test Ansible SSH
+- name: Déployer l'application Angular avec Apache
   hosts: servers
-  become: false
+  become: true  # Exécuter en mode superutilisateur
   roles:
     - build
   tasks:
@@ -19,10 +19,10 @@
       when: apache_installed.rc != 0
       notify: Redémarrer Apache
 
-    - name: Activer mod_rewrite pour Angular (si non activé)
-      command: a2enmod rewrite
-      args:
-        removes: /etc/apache2/mods-enabled/rewrite.load
+    - name: Activer mod_rewrite pour Angular
+      apache2_module:
+        name: rewrite
+        state: present
       notify: Redémarrer Apache
 
     - name: Copier les fichiers Angular vers /var/www/html/
@@ -34,9 +34,9 @@
       notify: Redémarrer Apache
 
     - name: Vérifier si la configuration Apache est déjà correcte
-      command: cat /etc/apache2/sites-available/000-default.conf
+      slurp:
+        src: /etc/apache2/sites-available/000-default.conf
       register: apache_conf
-      changed_when: false
 
     - name: Configurer le VirtualHost Apache (si nécessaire)
       copy:
@@ -54,18 +54,20 @@
               ErrorLog ${APACHE_LOG_DIR}/error.log
               CustomLog ${APACHE_LOG_DIR}/access.log combined
           </VirtualHost>
-      when: "'DocumentRoot /var/www/html' not in apache_conf.stdout"
+      when: "'DocumentRoot /var/www/html' not in apache_conf['content'] | b64decode"
       notify: Redémarrer Apache
+
+    - name: Vérifier si l'application Angular est accessible
+      uri:
+        url: "http://167.86.100.193"
+        status_code: 200
+      register: site_status
+      retries: 5
+      delay: 10
+      until: site_status.status == 200
 
   handlers:
     - name: Redémarrer Apache
       service:
         name: apache2
         state: restarted
-    - name: Vérifier si l'application Angular est accessible
-      uri:
-        url: "http://167.86.100.193"
-        status_code: 200
-      register: site_status
-      failed_when: site_status.status != 200
-    
