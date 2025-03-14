@@ -2,13 +2,13 @@ pipeline {
     agent any
     tools {nodejs "NODEJS"}
     stages {
-        stage('Install Dependencies') {
+        /*stage('Install Dependencies') {
             steps {
                 echo 'Install Dependencies'
                 sh 'npm install'
             }
         }
-        /*stage('Build') {
+        stage('Build') {
             steps {
                 echo 'Build'
                 sh 'npm run build --prod'
@@ -19,7 +19,7 @@ pipeline {
                 sh 'cat /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible/build.yml'
                 sh 'ansible-playbook /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible/build.yml -i ./ansible/inventory/host.yml'
             }
-        }*/
+        }
         stage('Unit Test') {
             steps {
                 echo 'Unit test'
@@ -27,21 +27,21 @@ pipeline {
                     sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
                 }
             }
-        }
+        }*/
         stage('Build') {
             steps {
                 sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml'
             }
         }
     
-        stage('Deploy') {
+        /*stage('Deploy') {
             steps {
                 echo 'Deploy'
                 sh 'chmod -R +rwx ./jenkins/scripts/deliver.sh'
                 sh 'jenkins/scripts/deliver.sh'
                 input message: 'Finibated using the web site? (Click "Proceed" to continue)'
             }
-        }
+        }*/
         
     }
     post {
@@ -53,52 +53,3 @@ pipeline {
         }
     }
 }
-
-/*pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-                script{
-                    echo 'Build ansible'
-                    sh 'ls -l /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible'
-                    sh 'find /var/lib/jenkins/workspace/Demo-ansible-pipeline/ansible -name "build.yml"'
-                    sh "ansiblePlaybook installation: 'Ansible', inventory: 'ansible/inventory/host.yml', playbook: 'ansible/build.yml', vaultTmpPath: ''"
-                }
-            }
-        }
-        
-        
-    }
-    post {
-        success {
-            echo 'Le déploiement a réussi!'
-        }
-        failure {
-            echo 'Le déploiement a échoué.'
-        }
-    }
-}*/
-
-/*pipeline {
-    agent any
-    stages {
-        stage('Build') {
-            steps {
-               sh "ansible --version"
-               sh "ansible-playbook --version"
-               sh "ansible-galaxy --version"
-            }
-        }
-        
-        
-    }
-    post {
-        success {
-            echo 'Le déploiement a réussi!'
-        }
-        failure {
-            echo 'Le déploiement a échoué.'
-        }
-    }
-} */
