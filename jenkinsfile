@@ -21,14 +21,8 @@ pipeline {
         }
         stage('Build') {
             steps {
-                script {
-                    withCredentials([string(credentialsId: 'vault-password-id', variable: 'VAULT_PASS')]) {
-                        writeFile file: 'vault_pass.txt', text: VAULT_PASS // Retirez les guillemets autour de ${VAULT_PASS}
-                        sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml --extra-vars @ansible/vault.yml --vault-password-file /var/lib/jenkins/workspace/Demo-ansible-
-pipeline/ansible/vault_pass.txt'
-                    }
-                }
-                //sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml --extra-vars @ansible/vault.yml --vault-password-file vault_pass.txt'
+            
+                sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml'
             }
         }
     
