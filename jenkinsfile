@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        VAULT_PASS = credentials('vault-password-id') 
+    }
     tools {nodejs "NODEJS"}
     stages {
         stage('Install Dependencies') {
@@ -18,7 +21,7 @@ pipeline {
         }
         stage('Build') {
             steps {
-                sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml --extra-vars "@ansible/vault.yml" --ask-vault-pass'
+                sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml'
             }
         }
     
