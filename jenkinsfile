@@ -1,8 +1,8 @@
 pipeline {
     agent any
-    environment {
+    /*environment {
         VAULT_PASS = credentials('vault-password-id') 
-    }
+    }*/
     tools {nodejs "NODEJS"}
     stages {
         stage('Install Dependencies') {
@@ -23,9 +23,11 @@ pipeline {
             steps {
                 script {
                     // Créer un fichier temporaire pour le mot de passe
-                    writeFile file: 'vault_pass.txt', text: "${VAULT_PASS}"
-                    // Utiliser le fichier temporaire avec Ansible
-                    sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml --extra-vars @ansible/vault.yml --vault-password-file vault_pass.txt'
+                    withCredentials([string(credentialsId: 'vault-password-id', variable: 'VAULT_PASS')]) {
+                        writeFile file: 'vault_pass.txt', text: "${VAULT_PASS}"
+                        // Utiliser le fichier temporaire avec Ansible
+                        sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml --extra-vars @ansible/vault.yml --vault-password-file ansible/vault_pass.txt'
+                    }
                 }
                 //sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml --extra-vars @ansible/vault.yml --vault-password-file vault_pass.txt'
             }
