@@ -5,11 +5,43 @@
   roles:
     - build
   tasks:
-    - name: Activer mod_rewrite pour Angular
-      apache2_module:
-        name: rewrite
-        state: present
-      notify: Redémarrer Apache
+    #- name: Activer mod_rewrite pour Angular
+      #apache2_module:
+        #name: rewrite
+        #state: present
+      #notify: Redémarrer Apache
+
+    - name: Créer ou mettre à jour le fichier .htaccess
+      copy:
+        dest: "/var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/.htaccess"
+        content: |
+          RewriteEngine On  
+          RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+          RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+          RewriteRule ^ - [L]
+          RewriteRule ^ /index.html [L]
+    
+    - name: Activer mod_rewrite
+      command: a2enmod rewrite
+      notify:
+        - Redémarrer Apache
+
+    - name: Modifier la configuration Apache pour autoriser .htaccess
+      blockinfile:
+        path: /etc/apache2/sites-available/000-default.conf
+        insertafter: "<VirtualHost *:80>"
+        block: |
+          <Directory "/var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app">
+              AllowOverride All
+              Require all granted
+          </Directory>
+      notify:
+        - Redémarrer Apache
+
+    - name: Redémarrer Apache
+      systemd:
+        name: apache2
+        state: restarted
 
     - name: Copier les fichiers Angular vers /var/www/html/
       synchronize:
