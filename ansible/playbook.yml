@@ -5,19 +5,41 @@
   roles:
     - build
   tasks:
-    - name: Vérifier si Apache est installé
-      command: dpkg-query -W apache2
-      register: apache_installed
-      ignore_errors: yes
-      changed_when: false
+    #- name: Vérifier si Apache est installé
+      #command: dpkg-query -W apache2
+      #register: apache_installed
+      #ignore_errors: yes
+      #changed_when: false
+    
 
-    - name: Installer Apache (si non installé)
-      apt:
-        name: apache2
-        state: present
-        update_cache: yes
-      when: apache_installed.rc != 0
-      notify: Redémarrer Apache
+    - name: Check if apache2 is installed
+      command: dpkg-query -W apache2
+      register: package\_check\_deb
+      failed\_when: package\_check\_deb.rc \&gt; 1
+      changed\_when: package\_check\_deb.rc == 1
+
+
+    #- name: Installer Apache (si non installé)
+      #apt:
+        #name: apache2
+        #state: present
+        #update_cache: yes
+      #when: apache_installed.rc != 0
+      #notify: Redémarrer Apache
+
+
+    - name: Download apache2
+      get_url:
+      url={{ package\_url }};
+      dest=/tmp/apache2
+      when: package_check_deb.rc == 1
+
+    - name: Install apache2
+      apt: deb=/tmp/apache2
+      sudo: true
+      when: package\_check\_deb.rc == 1
+
+
 
     - name: Activer mod_rewrite pour Angular
       apache2_module:

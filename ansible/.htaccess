@@ -1,0 +1,8 @@
+RewriteEngine On  
+# Si une ressource existante (fichier ou répertoire) est demandée, laissez la requête se poursuivre
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+RewriteRule ^ - [L]
+
+# Sinon, redirigez vers index.html
+RewriteRule ^ /index.html
