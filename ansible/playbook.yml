@@ -1,6 +1,6 @@
 ---
 - name: Déployer l'application Angular avec Apache
-  hosts: servers
+  hosts: all
   become: true  # Exécuter en mode superutilisateur
   roles:
     - build
