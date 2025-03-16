@@ -29,9 +29,7 @@
 
 
     - name: Download apache2
-      get_url:
-      url={{ package\_url }};
-      dest=/tmp/apache2
+      get_url: url={{ package\_url }}; dest=/tmp/apache2
       when: package_check_deb.rc == 1
 
     - name: Install apache2
