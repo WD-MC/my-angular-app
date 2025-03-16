@@ -22,7 +22,7 @@ pipeline {
         stage('Build') {
             steps {
             
-                sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml --ask-become-pass'
+                sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml'
             }
         }
     
