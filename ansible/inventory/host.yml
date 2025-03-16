@@ -4,4 +4,4 @@ all:
       ansible_connection: local
       ansible_user: root
       ansible_python_interpreter: /usr/bin/python3
-      ansible_ssh_private_key_file: /home/wdmc/.ssh/id_rsa.pub
+      ansible_ssh_private_key_file: ~/.ssh/id_rsa
