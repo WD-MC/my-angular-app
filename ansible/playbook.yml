@@ -18,13 +18,13 @@
       when: apache_installed.rc != 0
       notify: Redémarrer Apache
 
-    - name: Copy file from Jenkins workspace to remote server
+    - name: Copier les fichiers de production sur le serveur
       copy:
         src: /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/browser/index.html
-        dest: /var/www/html/index.html  # Destination file on the remote node
-        owner: root
-        group: root
-        mode: '0644'
+        dest: /var/www/html/            # Chemin vers le répertoire web d'Apache sur le serveur distant
+        owner: www-data
+        group: www-data
+        mode: '0755'
     
     - name: Vérifier si l'application Angular est accessible
       uri:
