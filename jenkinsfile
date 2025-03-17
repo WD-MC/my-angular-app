@@ -6,7 +6,6 @@ pipeline {
             steps {
                 echo 'Install Dependencies'
                 sh 'node -v'
-                sh 'npm cache clean --force'
                 sh 'npm install'
             }
         }
