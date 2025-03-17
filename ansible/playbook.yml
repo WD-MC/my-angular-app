@@ -1,10 +1,17 @@
 ---
 - name: Test Ansible SSH
   hosts: servers
-  become: false
+  become: true
   roles:
     - build
   tasks:
     - name: Test SSH connection
       command: echo "SSH connection successful"
+    - name: Check Node.js version
+      shell: "{{ nodejs_path }}/node -v"
+      register: node_version
+      
+    - name: Display Node.js version
+      debug:
+        msg: "Node.js version: {{ node_version.stdout }}"
     

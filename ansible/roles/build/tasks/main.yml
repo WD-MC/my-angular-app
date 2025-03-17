@@ -1,5 +1,18 @@
 ---
 # tasks file for build
 #build project
-  - name: build app
-    shell: ng build --configuration production && chmod 777 -R /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/
+  #- name: build app
+  #  shell: ng build --configuration production && chmod 777 -R /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/
+  - name: Build app
+    shell: |
+      export PATH=/var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/NODEJS/bin:$PATH
+      /var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/NODEJS/bin/node /var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/NODEJS/bin/ng build --configuration production
+    args:
+      chdir: /var/lib/jenkins/workspace/ansible-deployment
+
+  - name: Set permissions
+    file:
+      path: /var/lib/jenkins/workspace/ansible-deployment/dist
+      state: directory
+      mode: '0777'
+      recurse: yes
