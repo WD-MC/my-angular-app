@@ -2,6 +2,11 @@
 - name: Déployer l'application Angular avec Apache
   hosts: all
   become: true
+  - name: Installer Node.js
+    become: true
+    apt:
+      name: nodejs
+      state: latest
   roles:
     - build
   tasks:
