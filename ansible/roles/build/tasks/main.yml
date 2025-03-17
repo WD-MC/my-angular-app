@@ -32,7 +32,7 @@
       mode: '0755'
       recurse: yes
 
-  - name: Restart Apache service
-    service:
-      name: apache2
-      state: restarted
+  #- name: Restart Apache service
+    #service:
+      #name: apache2
+      #state: restarted
