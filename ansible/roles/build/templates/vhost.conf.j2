@@ -1,0 +1,21 @@
+<VirtualHost *:80>
+    ServerName {{ server_name | default('_') }}
+    DocumentRoot /var/www/html/my-angular-app
+
+    <Directory /var/www/html/my-angular-app>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+
+        # Pour les applications Angular avec routage côté client
+        RewriteEngine On
+        RewriteBase /
+        RewriteRule ^index\.html$ - [L]
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule . /index.html [L]
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/my-angular-app-error.log
+    CustomLog ${APACHE_LOG_DIR}/my-angular-app-access.log combined
+</VirtualHost>

@@ -15,24 +15,63 @@
       state: directory
       mode: '0777'
       recurse: yes
+      
+  # tasks file for deploy
+  - name: Ensure Apache is installed
+    apt:
+      name: apache2
+      state: present
+      update_cache: yes
 
-  - name: Deploy files to Apache web server
-    synchronize:
-      src: /var/lib/jenkins/workspace/ansible-deployment/dist/
-      dest: /var/www/html/
-      owner: yes
-      group: yes
-      mode: 'push'
-      recursive: yes
+  - name: Ensure rsync is installed
+    apt:
+      name: rsync
+      state: present
 
-  - name: Set permissions on Apache web server files
+  - name: Ensure Apache is running
+    service:
+      name: apache2
+      state: started
+      enabled: yes
+
+  - name: Ensure web directory exists
     file:
-      path: /var/www/html/
+      path: /var/www/html/my-angular-app
       state: directory
+      owner: www-data
+      group: www-data
+      mode: '0755'
+
+  - name: Copy built files to Apache
+    synchronize:
+      src: /var/lib/jenkins/workspace/ansible-deployment/dist/my-angular-app/
+      dest: /var/www/html/my-angular-app/
+      delete: yes
+      rsync_opts:
+        - "--chmod=u=rwX,g=rX,o=rX"
+
+  - name: Set proper permissions
+    file:
+      path: /var/www/html/my-angular-app
+      owner: www-data
+      group: www-data
       mode: '0755'
       recurse: yes
 
-  #- name: Restart Apache service
-    #service:
-      #name: apache2
-      #state: restarted
+  - name: Configure Apache virtual host
+    template:
+      src: vhost.conf.j2
+      dest: /etc/apache2/sites-available/my-angular-app.conf
+    notify: restart apache
+
+  - name: Enable site
+    command: a2ensite my-angular-app.conf
+    args:
+      creates: /etc/apache2/sites-enabled/my-angular-app.conf
+    notify: restart apache
+
+  - name: Ensure mod_rewrite is enabled
+    command: a2enmod rewrite
+    args:
+      creates: /etc/apache2/mods-enabled/rewrite.load
+    notify: restart apache

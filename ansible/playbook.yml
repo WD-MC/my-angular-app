@@ -1,17 +1,12 @@
 ---
-- name: Test Ansible SSH
+- name: Tasks file for deploy
   hosts: servers
   become: true
   vars:
     nodejs_path: /var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/NODEJS/bin
+    server_name: http://167.86.100.193
   roles:
     - build
   tasks:
-    - name: Test SSH connection
-      command: echo "SSH connection successful"
-    - name: Check Node.js version
-      shell: "{{ nodejs_path }}/node -v"
-      register: node_version
-    - name: Display Node.js version
-      debug:
-        msg: "Node.js version: {{ node_version.stdout }}"
+    - name: Deployment start
+      command: echo "Starting deployment..."
