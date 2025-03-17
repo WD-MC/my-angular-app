@@ -2,6 +2,8 @@
 - name: Déployer l'application Angular avec Apache
   hosts: all  
   become: true
+  roles:
+    build
 
   tasks:
     - name: Vérifier si Apache est installé
