@@ -24,7 +24,7 @@
         removes: /etc/apache2/mods-enabled/rewrite.load
       notify: Redémarrer Apache
 
-        - name: Copier les fichiers de production vers /var/www/html/
+    - name: Copier les fichiers de production vers /var/www/html/
       copy:
         src: /chemin/vers/ton/dossier/prod/
         dest: /var/www/html/
