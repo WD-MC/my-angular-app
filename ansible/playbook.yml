@@ -5,6 +5,15 @@
   roles:
     - build
   tasks:
+    - name: Installer nvm et Node.js
+      shell: |
+        curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm install 18
+      when: node_installed.rc != 0
+      register: node_installed
+      ignore_errors: yes
     - name: Vérifier si Apache est installé
       command: dpkg-query -W apache2
       register: apache_installed
