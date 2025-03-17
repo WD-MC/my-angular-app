@@ -24,14 +24,13 @@
         removes: /etc/apache2/mods-enabled/rewrite.load
       notify: Redémarrer Apache
 
-    - name: Copier les fichiers de production vers /var/www/html/
-      copy:
+    - name: Copier les fichiers de production depuis Jenkins vers /var/www/html/
+      synchronize:
+        mode: push
         src: /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/
         dest: /var/www/html/
-        owner: www-data
-        group: www-data
-        mode: '0755'
-        remote_src: yes  # S'assurer que le chemin source est correct
+        rsync_opts:
+          - "--delete"
 
     - name: Vérifier si l'application Angular est accessible
       uri:
