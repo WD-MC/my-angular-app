@@ -2,11 +2,6 @@
 - name: Déployer l'application Angular avec Apache
   hosts: all
   become: true
-  - name: Installer Node.js
-    become: true
-    apt:
-      name: nodejs
-      state: latest
   roles:
     - build
   tasks:
@@ -15,6 +10,11 @@
         #name: rewrite
         #state: present
       #notify: Redémarrer Apache
+    - name: Installer Node.js
+      apt:
+        name: nodejs
+        state: latest
+      when: ansible_os_family == "Debian" 
 
     - name: Créer ou mettre à jour le fichier .htaccess
       copy:
