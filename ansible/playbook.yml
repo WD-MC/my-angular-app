@@ -24,13 +24,19 @@
         removes: /etc/apache2/mods-enabled/rewrite.load
       notify: Redémarrer Apache
 
-    - name: Copier les fichiers de production depuis Jenkins vers /var/www/html/
-      synchronize:
-        mode: push
-        src: /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/
-        dest: /var/www/html/
-        rsync_opts:
-          - "--delete"
+    - name: Start and enable Apache2 service
+      service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Copy file from Jenkins workspace to remote server
+      copy:
+        src: /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/browser/index.html
+        dest: /var/www/html/index.html  
+        owner: root
+        group: root
+        mode: '0644'
 
     - name: Vérifier si l'application Angular est accessible
       uri:
@@ -40,34 +46,3 @@
       retries: 5
       delay: 10
       until: site_status.status == 200
-
-
-    - name: Vérifier si la configuration Apache est déjà correcte
-      command: cat /etc/apache2/sites-available/000-default.conf
-      register: apache_conf
-      changed_when: false
-
-    - name: Configurer le VirtualHost Apache (si nécessaire)
-      copy:
-        dest: /etc/apache2/sites-available/000-default.conf
-        content: |
-          <VirtualHost *:80>
-              ServerAdmin webmaster@localhost
-              DocumentRoot /var/www/html
-              
-              <Directory /var/www/html>
-                  AllowOverride All
-                  Require all granted
-              </Directory>
-              
-              ErrorLog ${APACHE_LOG_DIR}/error.log
-              CustomLog ${APACHE_LOG_DIR}/access.log combined
-          </VirtualHost>
-      when: "'DocumentRoot /var/www/html' not in apache_conf.stdout"
-      notify: Redémarrer Apache
-
-  handlers:
-    - name: Redémarrer Apache
-      service:
-        name: apache2
-        state: restarted
