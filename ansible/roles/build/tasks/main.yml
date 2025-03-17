@@ -22,7 +22,7 @@
       dest: /var/www/html/
       owner: yes
       group: yes
-      mode: '0755'
+      mode: 'push'
       recursive: yes
 
   - name: Set permissions on Apache web server files
