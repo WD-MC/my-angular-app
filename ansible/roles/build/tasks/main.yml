@@ -20,7 +20,7 @@
     synchronize:
       src: /var/lib/jenkins/workspace/ansible-deployment/dist/
       dest: /var/www/html/
-      owner: www-data
+      owner: yes
       group: www-data
       mode: '0755'
       recursive: yes
