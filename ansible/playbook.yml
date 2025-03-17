@@ -22,6 +22,7 @@
           RewriteRule ^ /index.html [L]
     
     - name: Activer mod_rewrite
+      become: true
       command: a2enmod rewrite
       notify:
         - Redémarrer Apache
