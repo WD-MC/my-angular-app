@@ -4,7 +4,6 @@
   become: true
   roles:
     - build
-
   tasks:
     - name: Vérifier si Apache est installé
       command: dpkg-query -W apache2
