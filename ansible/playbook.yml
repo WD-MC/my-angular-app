@@ -6,5 +6,5 @@
     - build
   tasks:
     - name: test becoome true
-      notify: Success
+    become: yes
     
