@@ -3,7 +3,7 @@
   hosts: all  
   become: true
   roles:
-    build
+    - build
 
   tasks:
     - name: Vérifier si Apache est installé
