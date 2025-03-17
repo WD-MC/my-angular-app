@@ -26,7 +26,7 @@
 
     - name: Copier les fichiers de production vers /var/www/html/
       copy:
-        src: /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/brozser/index.html
+        src: /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/browser/index.html
         dest: /var/www/html/index.html
         owner: www-data
         group: www-data
