@@ -23,7 +23,7 @@
       owner: www-data
       group: www-data
       mode: '0755'
-      recurse: yes
+      recursive: yes
 
   - name: Set permissions on Apache web server files
     file:
