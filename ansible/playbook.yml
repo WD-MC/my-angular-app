@@ -18,14 +18,21 @@
       when: apache_installed.rc != 0
       notify: Redémarrer Apache
 
-    - name: Copier les fichiers de production sur le serveur
+    - name: Activer mod_rewrite pour Angular (si non activé)
+      command: a2enmod rewrite
+      args:
+        removes: /etc/apache2/mods-enabled/rewrite.load
+      notify: Redémarrer Apache
+
+    - name: Copier les fichiers de production vers /var/www/html/
       copy:
-        src: /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/browser/index.html
-        dest: /var/www/html/            # Chemin vers le répertoire web d'Apache sur le serveur distant
+        src: /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/
+        dest: /var/www/html/
         owner: www-data
         group: www-data
         mode: '0755'
-    
+        remote_src: yes  # S'assurer que le chemin source est correct
+
     - name: Vérifier si l'application Angular est accessible
       uri:
         url: "http://167.86.100.193"
@@ -35,9 +42,33 @@
       delay: 10
       until: site_status.status == 200
 
-    - name: Restart Apache2 service
+
+    - name: Vérifier si la configuration Apache est déjà correcte
+      command: cat /etc/apache2/sites-available/000-default.conf
+      register: apache_conf
+      changed_when: false
+
+    - name: Configurer le VirtualHost Apache (si nécessaire)
+      copy:
+        dest: /etc/apache2/sites-available/000-default.conf
+        content: |
+          <VirtualHost *:80>
+              ServerAdmin webmaster@localhost
+              DocumentRoot /var/www/html
+              
+              <Directory /var/www/html>
+                  AllowOverride All
+                  Require all granted
+              </Directory>
+              
+              ErrorLog ${APACHE_LOG_DIR}/error.log
+              CustomLog ${APACHE_LOG_DIR}/access.log combined
+          </VirtualHost>
+      when: "'DocumentRoot /var/www/html' not in apache_conf.stdout"
+      notify: Redémarrer Apache
+
+  handlers:
+    - name: Redémarrer Apache
       service:
         name: apache2
         state: restarted
-
-   
