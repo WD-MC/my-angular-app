@@ -24,13 +24,24 @@
         removes: /etc/apache2/mods-enabled/rewrite.load
       notify: Redémarrer Apache
 
-    - name: Copier les fichiers Angular vers /var/www/html/
-      synchronize:
-        src: "/var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/"
-        dest: "/var/www/html/"
-        rsync_opts:
-          - "--delete"
-      notify: Redémarrer Apache
+        - name: Copier les fichiers de production vers /var/www/html/
+      copy:
+        src: /chemin/vers/ton/dossier/prod/
+        dest: /var/www/html/
+        owner: www-data
+        group: www-data
+        mode: '0755'
+        remote_src: yes  # S'assurer que le chemin source est correct
+
+    - name: Vérifier si l'application Angular est accessible
+      uri:
+        url: "http://167.86.100.193"
+        status_code: 200
+      register: site_status
+      retries: 5
+      delay: 10
+      until: site_status.status == 200
+
 
     - name: Vérifier si la configuration Apache est déjà correcte
       command: cat /etc/apache2/sites-available/000-default.conf
