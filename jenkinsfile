@@ -1,13 +1,11 @@
 pipeline {
     agent any
-    /*environment {
-        VAULT_PASS = credentials('vault-password-id') 
-    }*/
     tools {nodejs "NODEJS"}
     stages {
         stage('Install Dependencies') {
             steps {
                 echo 'Install Dependencies'
+                sh 'node -v'
                 sh 'npm install'
             }
         }
