@@ -1,8 +1,6 @@
 ---
 # tasks file for build
 #build project
-  #- name: build app
-    #shell: ng build --configuration production && /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/
   - name: Build app
     shell: |
       export PATH=/var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/NODEJS/bin:$PATH
@@ -17,3 +15,24 @@
       state: directory
       mode: '0777'
       recurse: yes
+
+  - name: Deploy files to Apache web server
+    copy:
+      src: /var/lib/jenkins/workspace/ansible-deployment/dist/
+      dest: /var/www/html/
+      owner: www-data
+      group: www-data
+      mode: '0755'
+      recurse: yes
+
+  - name: Set permissions on Apache web server files
+    file:
+      path: /var/www/html/
+      state: directory
+      mode: '0755'
+      recurse: yes
+
+  - name: Restart Apache service
+    service:
+      name: apache2
+      state: restarted
