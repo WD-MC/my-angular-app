@@ -1,13 +1,8 @@
 ---
 - name: Déployer l'application Angular avec Apache
-  hosts: all
+  hosts: all  
   become: true
-  roles:
-    - build
-  tasks:
-    - name: Déploiement de l'application Angular sur Apache
-  hosts: servers
-  become: true
+
   tasks:
     - name: Vérifier si Apache est installé
       command: dpkg-query -W apache2
