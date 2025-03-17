@@ -7,8 +7,6 @@
     server_name: http://167.86.100.193
   roles:
     - build
-  role:
-    - deploy
   tasks:
     - name: Deployment start
       command: echo "Starting deployment..."
