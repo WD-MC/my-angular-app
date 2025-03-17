@@ -18,10 +18,10 @@
 
   # roles/deploy/tasks/main.yml    
   - name: Ensure Apache is installed
-  apt:
-    name: apache2
-    state: present
-    update_cache: yes
+    apt:
+      name: apache2
+      state: present
+      update_cache: yes
 
   - name: Ensure rsync is installed
     apt:
