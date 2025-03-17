@@ -1,7 +1,7 @@
 ---
-- name: Déployer l'application Angular avec Apache
-  hosts: all  
-  become: true
+- name: Test Ansible SSH
+  hosts: servers
+  become: false
   roles:
     - build
   tasks:
@@ -25,23 +25,13 @@
         removes: /etc/apache2/mods-enabled/rewrite.load
       notify: Redémarrer Apache
 
-    - name: Copier les fichiers de production vers /var/www/html/
-      copy:
-        src: /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/browser/index.html
-        dest: /var/www/html/index.html
-        owner: www-data
-        group: www-data
-        mode: '0755'
-
-    - name: Vérifier si l'application Angular est accessible
-      uri:
-        url: "http://167.86.100.193"
-        status_code: 200
-      register: site_status
-      retries: 5
-      delay: 10
-      until: site_status.status == 200
-
+    - name: Copier les fichiers Angular vers /var/www/html/
+      synchronize:
+        src: "/var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/"
+        dest: "/var/www/html/"
+        rsync_opts:
+          - "--delete"
+      notify: Redémarrer Apache
 
     - name: Vérifier si la configuration Apache est déjà correcte
       command: cat /etc/apache2/sites-available/000-default.conf
@@ -72,3 +62,4 @@
       service:
         name: apache2
         state: restarted
+    
