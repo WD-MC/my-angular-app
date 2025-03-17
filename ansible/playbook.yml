@@ -2,6 +2,8 @@
 - name: Test Ansible SSH
   hosts: servers
   become: true
+  vars:
+    nodejs_path: /var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/NODEJS/bin
   roles:
     - build
   tasks:
@@ -10,8 +12,6 @@
     - name: Check Node.js version
       shell: "{{ nodejs_path }}/node -v"
       register: node_version
-      
     - name: Display Node.js version
       debug:
         msg: "Node.js version: {{ node_version.stdout }}"
-    

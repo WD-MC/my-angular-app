@@ -2,15 +2,6 @@ pipeline {
     agent any
     tools {nodejs "NODEJS"}
     stages {
-        stage('Check Node.js') {
-            steps {
-                sh 'node -v'
-                sh 'which node'
-                sh 'echo $PATH'
-                
-                    
-            }
-        }
         stage('Install Dependencies') {
             steps {
                 echo 'Install Dependencies'
