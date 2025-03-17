@@ -7,7 +7,7 @@ pipeline {
                 sh 'node -v'
                 sh 'which node'
                 sh 'echo $PATH'
-                sh '''
+                sh '
                     if [ -d "$HOME/.nvm" ]; then
                         echo "NVM is installed"
                         export NVM_DIR="$HOME/.nvm"
@@ -16,7 +16,7 @@ pipeline {
                     else
                         echo "NVM is not installed"
                     fi
-                    '''
+                    '
             }
         }
         stage('Install Dependencies') {
