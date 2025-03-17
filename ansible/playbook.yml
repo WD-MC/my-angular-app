@@ -6,5 +6,5 @@
     - build
   tasks:
     - name: test becoome true
-    become: true
+      command: echo "Sudo connection successful"
     
