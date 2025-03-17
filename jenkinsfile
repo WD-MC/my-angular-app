@@ -7,14 +7,7 @@ pipeline {
                 sh 'node -v'
                 sh 'which node'
                 sh 'echo $PATH'
-                sh 'if [ -d "$HOME/.nvm" ]; then
-                        echo "NVM is installed"
-                        export NVM_DIR="$HOME/.nvm"
-                        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-                        nvm ls
-                    else
-                        echo "NVM is not installed"
-                    fi'
+                
                     
             }
         }
