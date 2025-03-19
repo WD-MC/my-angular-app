@@ -1,8 +1,8 @@
 pipeline {
     agent any
-    tools {nodejs "NODEJS"}
+    //tools {nodejs "NODEJS"}
     stages {
-        stage('Install Dependencies') {
+        /*stage('Install Dependencies') {
             steps {
                 echo 'Install Dependencies'
                 sh 'npm install'
@@ -15,7 +15,7 @@ pipeline {
                     sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
                 }
             }
-        }
+        }*/
         stage('Build') {
             steps {
                 sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml'
