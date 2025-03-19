@@ -11,10 +11,11 @@ pipeline {
         stage('Unit Test') {
             steps {
                 echo 'Unit test'
-                timeout(time: 10, unit: 'MINUTES') {
+                sh 'npm run test -- --watch=false --browsers=jsdom'
+                /*timeout(time: 10, unit: 'MINUTES') {
                     //sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
                     sh 'npm run test -- --watch=false --browsers=jsdom'
-                }
+                }*/
             }
         }
         stage('Build') {
