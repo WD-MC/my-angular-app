@@ -1,65 +1,9 @@
 ---
-- name: Test Ansible SSH
+- name: Tasks file for deploy
   hosts: servers
   become: true
   roles:
     - build
   tasks:
-    - name: Vérifier si Apache est installé
-      command: dpkg-query -W apache2
-      register: apache_installed
-      ignore_errors: yes
-      changed_when: false
-
-    - name: Installer Apache (si non installé)
-      apt:
-        name: apache2
-        state: present
-        update_cache: yes
-      when: apache_installed.rc != 0
-      notify: Redémarrer Apache
-
-    - name: Activer mod_rewrite pour Angular (si non activé)
-      command: a2enmod rewrite
-      args:
-        removes: /etc/apache2/mods-enabled/rewrite.load
-      notify: Redémarrer Apache
-
-    - name: Copier les fichiers Angular vers /var/www/html/
-      synchronize:
-        src: "/var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/"
-        dest: "/var/www/html/"
-        rsync_opts:
-          - "--delete"
-      notify: Redémarrer Apache
-
-    - name: Vérifier si la configuration Apache est déjà correcte
-      command: cat /etc/apache2/sites-available/000-default.conf
-      register: apache_conf
-      changed_when: false
-
-    - name: Configurer le VirtualHost Apache (si nécessaire)
-      copy:
-        dest: /etc/apache2/sites-available/000-default.conf
-        content: |
-          <VirtualHost *:80>
-              ServerAdmin webmaster@localhost
-              DocumentRoot /var/www/html
-              
-              <Directory /var/www/html>
-                  AllowOverride All
-                  Require all granted
-              </Directory>
-              
-              ErrorLog ${APACHE_LOG_DIR}/error.log
-              CustomLog ${APACHE_LOG_DIR}/access.log combined
-          </VirtualHost>
-      when: "'DocumentRoot /var/www/html' not in apache_conf.stdout"
-      notify: Redémarrer Apache
-
-  handlers:
-    - name: Redémarrer Apache
-      service:
-        name: apache2
-        state: restarted
-    
+    - name: Deployment start
+      command: echo "Starting deployment..."
