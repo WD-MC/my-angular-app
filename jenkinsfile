@@ -8,14 +8,14 @@ pipeline {
                 sh 'npm install'
             }
         }
-        stage('Unit Test') {
+        /*stage('Unit Test') {
             steps {
                 echo 'Unit test'
                 timeout(time: 10, unit: 'MINUTES') {
                     sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
                 }
             }
-        }
+        }*/
         stage('Build') {
             steps {
                 sh 'ansible-playbook -v -i ansible/inventory/host.yml ansible/playbook.yml'

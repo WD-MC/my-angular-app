@@ -2,4 +2,10 @@
 # tasks file for build
 #build project
   - name: build app
-    shell: ng build --configuration production && /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/
+    shell: |
+      export PATH=$PATH:/var/lib/jenkins/tools/jenkins.plugins.nodejs.tools.NodeJSInstallation/NODEJS/bin
+      cd /var/lib/jenkins/workspace/test
+      ./node_modules/.bin/ng build --configuration production
+    args:
+      chdir: /var/lib/jenkins/workspace/test
+    #shell: ng build --configuration production && /var/lib/jenkins/workspace/Demo-ansible-pipeline/dist/my-angular-app/
