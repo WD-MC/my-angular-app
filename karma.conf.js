@@ -10,7 +10,8 @@ module.exports = function (config) {
       require('karma-chrome-launcher'),
       require('karma-jasmine-html-reporter'),
       require('karma-coverage'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      require('@angular-devkit/build-angular/plugins/karma'),
+      require('karma-jsdom-launcher')
     ],
     client: {
       jasmine: {
@@ -32,7 +33,7 @@ module.exports = function (config) {
       ]
     },
     reporters: ['progress', 'kjhtml'],
-    browsers: ['ChromeHeadless'],
+    browsers: ['ChromeHeadless', 'jsdom'],
     singleRun: true, // Exécute les tests une seule fois
     autoWatch: false, // Désactive la surveillance automatique
     restartOnFileChange: true
