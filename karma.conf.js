@@ -35,18 +35,14 @@ module.exports = function (config) {
     reporters: ['progress', 'kjhtml'],
     // Utilisez uniquement jsdom pour les tests CI
     browsers: ['jsdom'],
-    // Ajoutez ces timeouts
+    // Augmentez ces timeouts pour résoudre le problème
     browserDisconnectTimeout: 60000,
     browserNoActivityTimeout: 60000,
     captureTimeout: 60000,
-    // Limitez la concurrence pour éviter les problèmes de ressources
-    concurrency: 1,
-    // Pour les tests en CI
-    singleRun: true,
-    autoWatch: false,
-    // Supprimez ou désactivez cette option car elle est incompatible avec autoWatch: false
-    restartOnFileChange: false,
-    // Augmentez le niveau de log pour voir plus de détails
-    logLevel: config.LOG_INFO
+    // Configuration CI
+    singleRun: true,           // Exécute les tests une seule fois
+    autoWatch: false,          // Désactive la surveillance automatique
+    restartOnFileChange: false, // Désactive le redémarrage sur changement de fichier
+    concurrency: 1             // Limite la concurrence
   });
 };
